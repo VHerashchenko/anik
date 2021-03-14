@@ -52,7 +52,7 @@ public class SecondMethod {
     }
 
     private void negativeMethod (){
-        minValues = new ArrayList<>(findMinMaxValues(false));
+        minValues = findMinValues();
 
         outputNeg = maxValueAdd(minValues);
     }

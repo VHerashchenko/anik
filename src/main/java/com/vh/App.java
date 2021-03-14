@@ -20,9 +20,10 @@ public class App extends Application {
     private Integer expertCount = 0;
     private Integer alternativeCount = 0;
 
-    private List<Integer> marks = new ArrayList<>();
+    private List<Double> marks = new ArrayList<>();
     private List<Double> calculatedMarks = new ArrayList<>();
     FirstMethod normalMarks = new FirstMethod();
+    SecondMethod secondMethod = new SecondMethod();
 
     @Override
     public void start(Stage stage) {
@@ -108,7 +109,7 @@ public class App extends Application {
         acceptButton.setOnAction(value -> {
             marks = new ArrayList<>();
             for (int i = 0; i < markFields.size(); ++i) {
-                marks.add(Integer.valueOf(markFields.get(i).getText()));
+                marks.add(Double.valueOf(markFields.get(i).getText()));
             }
             calculate();
         });
@@ -119,12 +120,22 @@ public class App extends Application {
     }
 
     private void calculate() {
-        normalMarks.setInputValues(marks);
-        normalMarks.setAmountOfAlternatives(alternativeCount);
-        normalMarks.setAmountOfExpert(expertCount);
+//        normalMarks.setInputValues(marks);
+//        normalMarks.setAmountOfAlternatives(alternativeCount);
+//        normalMarks.setAmountOfExpert(expertCount);
+//
+//        normalMarks.calculateMarks();
 
-        normalMarks.calculateMarks();
-        calculatedMarks = normalMarks.getNormalMark();
+        secondMethod.setInputValues(marks);
+        secondMethod.setAmountOfSolving(expertCount);
+        secondMethod.setAmountOfStage(alternativeCount);
+
+        secondMethod.calculateAll();
+
+        calculatedMarks.add(secondMethod.getOutputGur());
+        calculatedMarks.add(secondMethod.getOutputNeg());
+        calculatedMarks.add(secondMethod.getOutputPos());
+//        calculatedMarks = normalMarks.getNormalMark();
 
         showResult();
     }
