@@ -1,7 +1,11 @@
 package com.vh;
 
+import com.google.common.collect.Lists;
+
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class SecondMethod {
 
@@ -46,7 +50,7 @@ public class SecondMethod {
     }
 
     private void positiveMethod(){
-        maxValues = new ArrayList<>(findMinMaxValues(true));
+        maxValues = findMaxValues();
 
         outputPos = maxValueAdd(maxValues);
     }
@@ -69,46 +73,26 @@ public class SecondMethod {
         outputGur = maxValueAdd(gurvicSums);
     }
 
-    private List<Double> findMinMaxValues(Boolean finder){
-        double currentValue;
-        double maxValue = inputValues.get(0);
-        double minValue = maxValue;
+    private List<Double> findMaxValues() {
+        return Lists.partition(inputValues, amountOfStage).parallelStream()
+                .map(list -> list.stream()
+                        .max(Comparator.comparingDouble(Double::doubleValue))
+                        .orElse(Double.MIN_VALUE))
+                .collect(Collectors.toList());
+    }
 
-        List<Double> maxValueList = new ArrayList<>();
-        List<Double> minValueList = new ArrayList<>();
-
-        for(int i = 0; i < amountOfSolving; ++i){
-            for(int j = 0; j < amountOfStage; ++j){
-                currentValue = inputValues.get(amountOfStage * i + j);
-                if(maxValue < currentValue){
-                    maxValue = currentValue;
-                }
-                else if(minValue > currentValue) {
-                    minValue = currentValue;
-                }
-            }
-            maxValueList.add(maxValue);
-            minValueList.add(minValue);
-            maxValue = inputValues.get(amountOfStage * i);
-            minValue = maxValue;
-        }
-
-
-
-        return finder? maxValueList : minValueList;
+    private List<Double> findMinValues() {
+        return Lists.partition(inputValues, amountOfStage).parallelStream()
+                .map(list -> list.stream()
+                        .min(Comparator.comparingDouble(Double::doubleValue))
+                        .orElse(Double.MAX_VALUE))
+                .collect(Collectors.toList());
     }
 
     private Double maxValueAdd(List<Double> valuesList){
-        double maxValue = valuesList.get(0);
-        double currentValue;
-
-        for(int i = 0; i < valuesList.size(); ++i){
-            currentValue = valuesList.get(i);
-            if(currentValue > maxValue){
-                maxValue = currentValue;
-            }
-        }
-        return maxValue;
+        return valuesList.stream()
+                .max(Comparator.comparingDouble(Double::doubleValue))
+                .orElse(Double.MIN_VALUE);
     }
 
 }
